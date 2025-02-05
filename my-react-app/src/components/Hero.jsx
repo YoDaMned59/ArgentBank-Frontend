@@ -1,3 +1,5 @@
+import '../styles/hero.css'
+
 export const Hero = () => {
     return (
         <div className="hero">
