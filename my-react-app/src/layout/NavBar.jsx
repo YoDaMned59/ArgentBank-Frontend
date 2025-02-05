@@ -1,34 +1,59 @@
 import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logoutSuccess } from "../redux/loginSlice";
+import { userLogout } from "../redux/userSlice";
 import argentBankLogo from "../assets/argentBankLogo.webp";
 import '../styles/navBar.css';
-import { useDispatch } from "react-redux";
-import { logout } from "../redux/authSlice";
 
-const Header = () => {
-  const dispatch = useDispatch();
 
-  return (
-    <button onClick={() => dispatch(logout())}>Déconnexion</button>
-  );
-};
 
 export const NavBar = () => {
+  const firstName = useSelector((state) => state.user.firstName);
+  const userName = useSelector((state) => state.user.userName);
+  const displayName = userName ? userName : firstName;
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isAuth = useSelector((state) => state.login.isAuth);
+
+  const handleLogout = () => {
+    dispatch(logoutSuccess());
+    dispatch(userLogout());
+    navigate("/");
+  };
+  console.log("userName dans Redux:", userName);
   return (
-    <nav className="main-nav">
-      <NavLink to="/" className="main-nav-logo">
-        <img
-          className="main-nav-logo-image"
-          src={argentBankLogo}
-          alt="Argent Bank Logo"
-        />
-        <h1 className="sr-only">Argent Bank</h1>
-      </NavLink>
-      <div>
-        <NavLink to="/sign-in" className="main-nav-item">
-          <i className="fa fa-user-circle"></i>
-          Sign In
+    <div>
+      <nav className="main-nav">
+        <NavLink to="/" className="main-nav-logo">
+          <img
+            src={argentBankLogo}
+            alt="Argent Bank Logo"
+            className="main-nav-logo-image"
+          />
+          <h1 className="sr-only">Argent Bank</h1>
         </NavLink>
-      </div>
-    </nav>
+
+        <div>
+          {isAuth ? (
+            <div className="user-firstname">
+              <i className="fa fa-user-circle"></i>&nbsp;
+              <span className="firstname">{displayName}&nbsp;</span>
+              <button
+                onClick={handleLogout}
+                className="main-nav-item logout-btn"
+              >
+                <i className="fa fa-sign-out"></i>&nbsp;Sign Out
+              </button>
+            </div>
+          ) : (
+            <NavLink to="/login" className="main-nav-item">
+              <i className="fa fa-user-circle"></i>&nbsp;Sign In
+            </NavLink>
+          )}
+        </div>
+      </nav>
+    </div>
   );
 };

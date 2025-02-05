@@ -1,13 +1,82 @@
-import '../styles/profile.css';
+import '../styles/profile.css'
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userProfile } from "../api/userProfile";
+import { updateUserProfile } from "../api/updateUserProfile";
+
 
 export const Profile = () => {
-  return (
-    <main className="main bg-dark">
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.login.token);
+  console.log("Token dans Redux :", token);
+
+  const profile = useSelector((state) => state.user.profile);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(userProfile(token));
+    } else {
+      console.error("Aucun token trouvé !");
+    }
+  }, [dispatch, token]);
+  useEffect(() => {
+    if (profile) {
+      setUserName(profile.userName || "");
+    }
+  }, [profile]);
+  const handleSave = () => {
+    if (userName !== profile?.userName) {
+      console.log("Token envoyé dans handleSave :", token);
+      dispatch(
+        updateUserProfile({
+          ...profile,
+          userName,
+          token, 
+        })
+      );
+      setIsEditing(false); 
+    }
+  };
+
+    return (
+      <main className="main bg-dark">
       <div className="header">
-        <h1>Welcome back<br />Tony Jarvis!</h1>
-        <button className="edit-button">Edit Name</button>
+        <h1>
+          {isEditing
+            ? "Edit user info"
+            : `Welcome back\n${profile?.firstName} ${profile?.lastName} !`}
+        </h1>
+
+        {isEditing ? (
+          <div>
+            <label>
+              Username:
+              <input
+                type="text"
+                name="userName"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+            </label>
+
+            <button onClick={handleSave}>Save</button>
+            <button onClick={() => setIsEditing(false)}>Cancel</button>
+          </div>
+        ) : (
+          <>
+            <button className="edit-button" onClick={() => setIsEditing(true)}>
+              Edit Name
+            </button>
+          </>
+        )}
       </div>
+
       <h2 className="sr-only">Accounts</h2>
+
       <section className="account">
         <div className="account-content-wrapper">
           <h3 className="account-title">Argent Bank Checking (x8349)</h3>
@@ -39,5 +108,5 @@ export const Profile = () => {
         </div>
       </section>
     </main>
-  );
-};
+    )
+}

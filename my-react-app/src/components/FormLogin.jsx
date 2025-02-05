@@ -1,47 +1,57 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../redux/authSlice";
+import { loginSuccess, loginFail } from "../redux/loginSlice";
+import { LoginCall } from "../api/loginAuth";
 import "../styles/formLogin.css";
 
 export const FormLogin = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const { error } = useSelector((state) => state.login);
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector((state) => state.auth);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email: username, password }))
-      .then((action) => {
-        if (action.type === 'auth/loginUser/fulfilled') {
-          navigate("/user");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    const formData = {
+      email,
+      password,
+      rememberMe,
+    };
+
+    try {
+      const data = await LoginCall(formData);
+      const token = data.body.token;
+      console.log("Données retournées par l'API :", data);
+
+      dispatch(loginSuccess({ body: { token } }));
+      navigate("/user");
+    } catch (err) {
+      const errorMessage = err.message || "Login failed";
+      dispatch(loginFail(errorMessage));
+    }
   };
 
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
-        <i className="fa fa-user-circle sign-in-icon"></i>
-        <h1>Connexion</h1>
+        <i className="fa fa-user-circle"></i>
+        <h1>Sign In</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-wrapper">
-            <label htmlFor="username">Nom d'utilisateur</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
           <div className="input-wrapper">
-            <label htmlFor="password">Mot de passe</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -50,10 +60,19 @@ export const FormLogin = () => {
               required
             />
           </div>
-          <input type="checkbox" id="remember-me" /><label htmlFor="remember-me">Remember me</label>
-          {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="sign-in-button" disabled={isLoading}>
-            {isLoading ? "Connexion en cours..." : "Se connecter"}
+          <div className="input-remember">
+            <input
+              type="checkbox"
+              id="remember-me"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <label htmlFor="remember-me">Remember me</label>
+          </div>
+          {error && <p className="error-message">login failed</p>}
+
+          <button type="submit" className="sign-in-button">
+            Sign In
           </button>
         </form>
       </section>

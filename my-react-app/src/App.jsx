@@ -8,6 +8,7 @@ import { NavBar } from './layout/NavBar';
 import { Footer } from './layout/Footer';
 import { User } from './pages/User';
 
+
 function App() {
   return (
     <Router>
