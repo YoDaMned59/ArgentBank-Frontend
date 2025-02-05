@@ -50,6 +50,7 @@ export const FormLogin = () => {
               required
             />
           </div>
+          <input type="checkbox" id="remember-me" /><label htmlFor="remember-me">Remember me</label>
           {error && <p className="error-message">{error}</p>}
           <button type="submit" className="sign-in-button" disabled={isLoading}>
             {isLoading ? "Connexion en cours..." : "Se connecter"}
