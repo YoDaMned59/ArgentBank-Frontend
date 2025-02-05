@@ -1,6 +1,16 @@
 import { NavLink } from "react-router-dom";
 import argentBankLogo from "../assets/argentBankLogo.webp";
 import '../styles/navBar.css';
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/authSlice";
+
+const Header = () => {
+  const dispatch = useDispatch();
+
+  return (
+    <button onClick={() => dispatch(logout())}>Déconnexion</button>
+  );
+};
 
 export const NavBar = () => {
   return (

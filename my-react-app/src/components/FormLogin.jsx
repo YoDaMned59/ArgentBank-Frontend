@@ -1,27 +1,27 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../redux/authSlice";
 import "../styles/formLogin.css";
-import { LoginCall } from "../api/loginAuth";
 
 export const FormLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoading, error } = useSelector((state) => state.auth);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const response = await LoginCall({ email: username, password });
-
-      if (response.status === 200) {
-        console.log("Connexion réussie !", response.body);
-        localStorage.setItem("token", response.body.token);
-      } else {
-        setError("Identifiants incorrects. Veuillez réessayer.");
-      }
-    } catch (err) {
-      setError("Une erreur est survenue. Veuillez réessayer plus tard.");
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(loginUser({ email: username, password }))
+      .then((action) => {
+        if (action.type === 'auth/loginUser/fulfilled') {
+          navigate("/user");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -50,12 +50,10 @@ export const FormLogin = () => {
               required
             />
           </div>
-          <div className="input-remember">
-            <input type="checkbox" id="remember-me" />
-            <label htmlFor="remember-me">Remember me</label>
-          </div>
           {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="sign-in-button">Se connecter</button>
+          <button type="submit" className="sign-in-button" disabled={isLoading}>
+            {isLoading ? "Connexion en cours..." : "Se connecter"}
+          </button>
         </form>
       </section>
     </main>
