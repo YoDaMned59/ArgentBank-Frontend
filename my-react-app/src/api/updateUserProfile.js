@@ -24,7 +24,7 @@ export const updateUserProfile = createAsyncThunk(
         );
       }
 
-      return data.body; // Ce retour sera envoyé au `fulfilled` dans `extraReducers`
+      return data.body;
     } catch (error) {
       return rejectWithValue(error.message);
     }
