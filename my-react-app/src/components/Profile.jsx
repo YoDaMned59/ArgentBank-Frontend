@@ -15,6 +15,8 @@ export const Profile = () => {
   console.log("Token dans Redux :", token);
 
   const profile = useSelector((state) => state.user.profile);
+  console.log('profile', profile);
+  
 
   useEffect(() => {
     if (token) {
@@ -48,7 +50,7 @@ export const Profile = () => {
         <h1>
           {isEditing
             ? "Edit user info"
-            : `Welcome back\n${profile?.firstName} ${profile?.lastName} !`}
+            : `Welcome back\n${profile?.userName} !`}
         </h1>
 
         {isEditing ? (

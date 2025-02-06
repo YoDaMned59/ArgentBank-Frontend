@@ -2,15 +2,15 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginSuccess, loginFail } from "../redux/loginSlice";
-import { LoginCall } from "../api/loginAuth";
+import { LoginCall } from "../redux/userActions";
 import "../styles/formLogin.css";
 
 export const FormLogin = () => {
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.login);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("tony@stark.com");
+  const [password, setPassword] = useState("password123");
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e) => {
