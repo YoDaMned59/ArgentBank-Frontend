@@ -1,8 +1,8 @@
 import '../styles/profile.css'
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userProfile } from "../api/userProfile";
-import { updateUserProfile } from "../api/updateUserProfile";
+import { userProfile } from "../redux/userActions";
+import { updateUserProfile } from "../redux/userActions";
 
 
 export const Profile = () => {
