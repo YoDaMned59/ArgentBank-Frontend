@@ -44,12 +44,12 @@ export const NavBar = () => {
                 onClick={handleLogout}
                 className="main-nav-item logout-btn"
               >
-                <i className="fa fa-sign-out"></i>&nbsp;Sign Out
+                <i className="fa fa-sign-out"></i>Sign Out
               </button>
             </div>
           ) : (
             <NavLink to="/login" className="main-nav-item">
-              <i className="fa fa-user-circle"></i>&nbsp;Sign In
+              <i className="fa fa-user-circle"></i>Sign In
             </NavLink>
           )}
         </div>

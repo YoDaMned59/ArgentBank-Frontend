@@ -1,9 +1,8 @@
 import './index.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { FormLogin } from './components/FormLogin';
-import { Profile } from './components/Profile';
+import { Error404 } from './pages/Error';
 import { Home } from './pages/Home';
-import { SignIn } from './pages/SignIn';
 import { NavBar } from './layout/NavBar';
 import { Footer } from './layout/Footer';
 import { User } from './pages/User';
@@ -16,10 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/user" element={<User />} />
-        <Route path="/sign-in" element={<SignIn />} />
         <Route path="/login" element={<FormLogin />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+        <Route path="/*" element={<Error404 />} />
+       </Routes>
       <Footer />
     </Router>
   );
