@@ -12,7 +12,7 @@ export const NavBar = () => {
   const firstName = useSelector((state) => state.user.firstName);
   const userName = useSelector((state) => state.user.userName);
   const displayName = userName ? userName : firstName;
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuth = useSelector((state) => state.login.isAuth);
@@ -39,7 +39,9 @@ export const NavBar = () => {
           {isAuth ? (
             <div className="user-firstname">
               <i className="fa fa-user-circle"></i>&nbsp;
-              <span className="firstname">{displayName}&nbsp;</span>
+              <NavLink to="/user" className="firstname">
+                {displayName}&nbsp;
+              </NavLink>
               <button
                 onClick={handleLogout}
                 className="main-nav-item logout-btn"
