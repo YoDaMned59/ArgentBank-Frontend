@@ -2,6 +2,7 @@ import { featuresData } from "../data/featuresData";
 import { FeatureItem } from "./FeatureItem";
 import "../styles/features.css";
 
+
 export const Features = () => {
   return (
     <section className="features">

@@ -1,5 +1,4 @@
 
-
 export const FeatureItem = ({ icon, alt, title, description }) => {
   return (
     <div className="feature-item">

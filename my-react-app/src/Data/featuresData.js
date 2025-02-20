@@ -4,7 +4,7 @@ import iconSecurity from "../assets/icon-security.png";
 
 export const featuresData = [
   {
-    icon: iconChat,
+   icon: iconChat,
     alt: "Chat Icon",
     title: "You are our #1 priority",
     description:
