@@ -38,6 +38,10 @@ export const Profile = () => {
     }
   };
 
+  const handleViewTransactions = () => {
+    navigate("/error404");
+  };
+
   return (
     <main className="main bg-dark">
       <div className="header">
@@ -81,7 +85,9 @@ export const Profile = () => {
           <p className="account-amount-description">Available Balance</p>
         </div>
         <div className="account-content-wrapper cta">
-          <button className="transaction-button">View transactions</button>
+          <button className="transaction-button" onClick={handleViewTransactions}>
+            View transactions
+          </button>
         </div>
       </section>
       <section className="account">
@@ -91,7 +97,9 @@ export const Profile = () => {
           <p className="account-amount-description">Available Balance</p>
         </div>
         <div className="account-content-wrapper cta">
-          <button className="transaction-button">View transactions</button>
+          <button className="transaction-button" onClick={handleViewTransactions}>
+            View transactions
+          </button>
         </div>
       </section>
       <section className="account">
@@ -101,7 +109,9 @@ export const Profile = () => {
           <p className="account-amount-description">Current Balance</p>
         </div>
         <div className="account-content-wrapper cta">
-          <button className="transaction-button">View transactions</button>
+          <button className="transaction-button" onClick={handleViewTransactions}>
+            View transactions
+          </button>
         </div>
       </section>
     </main>
