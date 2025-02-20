@@ -9,7 +9,7 @@ import '../styles/navBar.css';
 export const NavBar = () => {
   const firstName = useSelector((state) => state.user.firstName);
   const userName = useSelector((state) => state.user.userName);
-  const displayName = userName || firstName || "Guest";  // fallback to "Guest"
+  const displayName = userName || firstName || "Guest"; 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,7 +20,6 @@ export const NavBar = () => {
     dispatch(userLogout());
     navigate("/");
   };
-  console.log("userName dans Redux:", userName);
 
   return (
     <div>
@@ -38,9 +37,9 @@ export const NavBar = () => {
           {isAuth ? (
             <div className="user-firstname">
               <i className="fa fa-user-circle"></i>&nbsp;
-              <NavLink to="/user" className="firstname">
+              <span className="firstname" onClick={() => navigate("/user")}>
                 {displayName}&nbsp;
-              </NavLink>
+              </span>
               <button
                 onClick={handleLogout}
                 className="main-nav-item logout-btn"
@@ -50,7 +49,7 @@ export const NavBar = () => {
             </div>
           ) : (
             <NavLink to="/login" className="main-nav-item">
-              <i className="fa fa-user-circle"></i>Sign In
+              <i className="fa fa-user-circle"></i>&nbsp;Sign In
             </NavLink>
           )}
         </div>

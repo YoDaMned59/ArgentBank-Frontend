@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { userProfile, updateUserProfile } from "../redux/userActions";
-import { AccountItem } from "./AccountItem"; 
+import { AccountItem } from "./AccountItem";
 import { accountsData } from "../Data/accountsData";
 
 export const Profile = () => {
@@ -15,9 +15,6 @@ export const Profile = () => {
   const token = useSelector((state) => state.login.token);
   const isAuth = useSelector((state) => state.login.isAuth);
   const profile = useSelector((state) => state.user.profile);
-
-  console.log("Token dans Redux :", token);
-  console.log("profile", profile);
 
   useEffect(() => {
     if (!isAuth) {
@@ -33,11 +30,17 @@ export const Profile = () => {
     }
   }, [profile]);
 
-  const handleSave = () => {
+  const handleSave = (e) => {
+    e.preventDefault(); // Empêche la soumission du formulaire
     if (userName !== profile?.userName) {
       dispatch(updateUserProfile({ ...profile, userName, token }));
       setIsEditing(false);
     }
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setUserName(profile?.userName || ""); // Réinitialiser au nom d'utilisateur d'origine
   };
 
   const handleViewTransactions = () => {
@@ -56,20 +59,49 @@ export const Profile = () => {
         </h1>
 
         {isEditing ? (
-          <div>
-            <label>
-              Username:
-              <input
-                type="text"
-                name="userName"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-            </label>
+          <form className="profile-form" onSubmit={handleSave}>
+            <div className="form-box">
+              <label htmlFor="userName">
+                User name:
+                <input
+                  type="text"
+                  name="userName"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="form-input"
+                />
+              </label>
+            </div>
 
-            <button onClick={handleSave}>Save</button>
-            <button onClick={() => setIsEditing(false)}>Cancel</button>
-          </div>
+            <div className="form-box">
+              <label htmlFor="firstName">
+                First Name:
+                <input
+                  type="text"
+                  name="firstName"
+                  value={profile?.firstName || ""}
+                  readOnly
+                  className="form-input"
+                />
+              </label>
+            </div>
+
+            <div className="form-box">
+              <label htmlFor="lastName">
+                Last Name:
+                <input
+                  type="text"
+                  name="lastName"
+                  value={profile?.lastName || ""}
+                  readOnly
+                  className="form-input"
+                />
+              </label>
+            </div>
+
+            <button type="submit" className="save-btn">Save</button>
+            <button type="button" onClick={handleCancel} className="cancel-btn">Cancel</button>
+          </form>
         ) : (
           <button className="edit-button" onClick={() => setIsEditing(true)}>
             Edit Name
