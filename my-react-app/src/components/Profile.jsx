@@ -1,56 +1,52 @@
-import '../styles/profile.css'
+import "../styles/profile.css";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { userProfile } from "../redux/userActions";
-import { updateUserProfile } from "../redux/userActions";
-
+import { useNavigate } from "react-router-dom";
+import { userProfile, updateUserProfile } from "../redux/userActions";
 
 export const Profile = () => {
-
   const [isEditing, setIsEditing] = useState(false);
   const [userName, setUserName] = useState("");
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.login.token);
-  console.log("Token dans Redux :", token);
-
+  const isAuth = useSelector((state) => state.login.isAuth);
   const profile = useSelector((state) => state.user.profile);
-  console.log('profile', profile);
-  
+
+  console.log("Token dans Redux :", token);
+  console.log("profile", profile);
 
   useEffect(() => {
-    if (token) {
+    if (!isAuth) {
+      navigate("/login");
+    } else if (token) {
       dispatch(userProfile(token));
-    } else {
-      console.error("Aucun token trouvé !");
     }
-  }, [dispatch, token]);
+  }, [dispatch, isAuth, token, navigate]);
+
   useEffect(() => {
-    if (profile) {
+    if (profile && profile.userName) {
       setUserName(profile.userName || "");
     }
   }, [profile]);
+
   const handleSave = () => {
     if (userName !== profile?.userName) {
-      console.log("Token envoyé dans handleSave :", token);
-      dispatch(
-        updateUserProfile({
-          ...profile,
-          userName,
-          token, 
-        })
-      );
-      setIsEditing(false); 
+      dispatch(updateUserProfile({ ...profile, userName, token }));
+      setIsEditing(false);
     }
   };
 
-    return (
-      <main className="main bg-dark">
+  return (
+    <main className="main bg-dark">
       <div className="header">
         <h1>
           {isEditing
             ? "Edit user info"
-            : `Welcome back\n${profile?.userName} !`}
+            : profile && profile.userName
+            ? `Welcome back\n${profile.userName} !`
+            : "Loading..."}
         </h1>
 
         {isEditing ? (
@@ -69,16 +65,15 @@ export const Profile = () => {
             <button onClick={() => setIsEditing(false)}>Cancel</button>
           </div>
         ) : (
-          <>
-            <button className="edit-button" onClick={() => setIsEditing(true)}>
-              Edit Name
-            </button>
-          </>
+          <button className="edit-button" onClick={() => setIsEditing(true)}>
+            Edit Name
+          </button>
         )}
       </div>
 
       <h2 className="sr-only">Accounts</h2>
 
+      {/* Section accounts */}
       <section className="account">
         <div className="account-content-wrapper">
           <h3 className="account-title">Argent Bank Checking (x8349)</h3>
@@ -110,5 +105,5 @@ export const Profile = () => {
         </div>
       </section>
     </main>
-    )
-}
+  );
+};

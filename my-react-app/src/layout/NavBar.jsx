@@ -6,12 +6,10 @@ import { userLogout } from "../redux/userSlice";
 import argentBankLogo from "../assets/argentBankLogo.webp";
 import '../styles/navBar.css';
 
-
-
 export const NavBar = () => {
   const firstName = useSelector((state) => state.user.firstName);
   const userName = useSelector((state) => state.user.userName);
-  const displayName = userName ? userName : firstName;
+  const displayName = userName || firstName || "Guest";  // fallback to "Guest"
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,6 +21,7 @@ export const NavBar = () => {
     navigate("/");
   };
   console.log("userName dans Redux:", userName);
+
   return (
     <div>
       <nav className="main-nav">
@@ -46,7 +45,7 @@ export const NavBar = () => {
                 onClick={handleLogout}
                 className="main-nav-item logout-btn"
               >
-                <i className="fa fa-sign-out"></i>Sign Out
+                <i className="fa fa-sign-out"></i>&nbsp;Sign Out
               </button>
             </div>
           ) : (
